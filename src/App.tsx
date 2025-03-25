@@ -53,6 +53,9 @@ const App: Component = () => {
       name: store.name,
       title: store.title,
       description: store.description,
+      tag: store.tag,
+      project: store.project,
+      assignees: store.assignees
     };
   
     const formData = store.sections.map((section, index) => {
@@ -100,7 +103,7 @@ const App: Component = () => {
       <div class="container">
         <div class="grid md:grid-cols-2 gap-10">
           <div class="space-y-4 my-4">
-            {["name", "title", "description"].map((field: string) => (
+            {["name", "title", "description", "tag", "project", "assignees"].map((field: string) => (
               <div class="space-y-1">
                 <label for={`${field}-input`} class="text-sm capitalize">{field}</label>
                 {field === "description" ? (
