@@ -119,7 +119,7 @@ const App: Component = () => {
               </div>
             ))}
 
-            <div>
+           <div>
               <h2 class="text-lg">Body</h2>
               <div class="space-y-2 divide-y-[1px] dark:divide-white/20">
                 <For each={store.sections}>
@@ -128,15 +128,79 @@ const App: Component = () => {
                       <Select
                         class="block my-4"
                         value={section.type}
-                        onInput={(e) => handleChange(index(), { type: e.currentTarget.value as Section["type"] })}
+                        onInput={(e) => handleChange(index(), "{ type",: e.currentTarget.value as Section["type"] })}
                       >
                         {["Markdown", "Textarea", "Input", "Dropdown", "Checkboxes"].map((type) => (
                           <option value={type}>{type}</option>
                         ))}
                       </Select>
 
-                      <div class="flex justify-end">
-                        <Button variety="primary" class="flex gap-1" onClick={() => removeSection(index())}>
+                      <div class="space-y-2">
+                        <Show when={section.type !== "Markdown"}>
+                          <Input
+                            class="w-full block"
+                            placeholder="Enter label"
+                            value={section.label || ""}
+                            onInput={(e) => handleChange(index(), "label", e.currentTarget.value)}
+                          />
+                          <Input
+                            class="w-full block"
+                            placeholder="Enter description"
+                            value={section.description || ""}
+                            onInput={(e) => handleChange(index(), "description", e.currentTarget.value)}
+                          />
+                          {section.type === "Input" && (
+                            <>
+                              <Input
+                                class="w-full block"
+                                placeholder="Enter placeholder"
+                                value={section.placeholder || ""}
+                                onInput={(e) => handleChange(index(), "placeholder", e.currentTarget.value)}
+                              />
+                              <Input
+                                class="w-full block"
+                                placeholder="Enter value"
+                                value={section.value || ""}
+                                onInputflex justify-end">
+                        <Button variety="primary" class="flex gap-1" onClick={(e) => handleChange(index(), "value", e.currentTarget.value)}
+                              />
+                            </>
+                          )}
+                          {section.type === "Textarea" && (
+                            <Textarea
+                              rows={3}
+                              class="w-full block"
+                              placeholder="Enter text"
+                              value={section.value || ""}
+                              onInput={(e) => handleChange(index(), "value", e.currentTarget.value)}
+                            />
+                          )}
+                          {section.type === "Dropdown" && (
+                            <Input
+                              class="w-full block"
+                              placeholder="Enter options"
+                              value={section.options?.join(", ") || ""}
+                              onInput={(e) => handleChange(index(), "options", e.currentTarget.value.split(", "))}
+                            />
+                          )}
+                          {section.type === "Checkboxes" && (
+                            <Input
+                              class="w-full block"
+                              placeholder="Enter options"
+                              value={section.options?.join(", ") || ""}
+                              onInput={(e) => handleChange(index(), "options", e.currentTarget.value.split(", "))}
+                            />
+                          )}
+                        </Show>
+                        {section.type === "Markdown" && (
+                          <Textarea
+                            rows={3}
+                            class="w-full block"
+                            placeholder="Enter markdown content"
+                            value={section.value || ""}
+                            onInput={(e) => handleChange(index(), "value", e.currentTarget.value)}
+                          />
+                        )}removeSection(index())}>
                           <TrashIcon size={14} /> Remove
                         </Button>
                       </div>
@@ -145,8 +209,13 @@ const App: Component = () => {
                 </For>
 
                 <div class="flex justify-end my-6 py-4">
-                  <Button variety="primary" class="flex gap-1 py-1.5" onClick={addSection}>
-                    <PlusIcon size={14} /> Add Section
+                  <Button
+                    variety="primary"
+                    class="flex gap-1 py-1.5 items-center"
+                    variety="primary" class="flex gap-1 py-1.5" onClick={addSection}
+                  >
+                    <PlusIcon size={14} />
+                    Add Section
                   </Button>
                 </div>
               </div>
@@ -155,12 +224,17 @@ const App: Component = () => {
 
           <div class="mt-6">
             <div class="flex justify-end">
-              <button class="px-4 py-1 flex gap-2 text-sm hover:bg-black/10 rounded" onClick={handleCopy}>
+              <button
+                class="px-4 py-1 flex items-center gap-2 text-sm hover:bg-black/10 dark:hover:bg-white/10 rounded transform duration-200"
+               rounded" onClick={handleCopy}
+              >
                 {copied() ? "Copied" : "Copy"}
                 <CopyIcon size={17} />
               </button>
             </div>
-            <Highlight language="yaml">{yamlOutput()}</Highlight>
+            <Highlight language="yaml">
+              {store.yamlOutput}
+            {yamlOutput()}</Highlight>
           </div>
         </div>
       </div>
