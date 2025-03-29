@@ -2,7 +2,8 @@ import { createSignal, createMemo, For, Show } from "solid-js";
 import { createStore } from "solid-js/store";
 import type { Component } from "solid-js";
 import PlusIcon from "lucide-solid/icons/plus";
-import { CopyIcon, TrashIcon } from "lucide-solid";
+import CopyIcon from "lucide-solid/icons/copy";
+import TrashIcon from "lucide-solid/icons/trash"
 import Header from "./components/Header";
 import Button from "./components/ui/Button";
 import Input from "./components/ui/Input";
