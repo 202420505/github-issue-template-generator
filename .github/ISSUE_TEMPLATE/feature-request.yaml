@@ -1,15 +1,27 @@
 name: Feature Request
-title: Feature Request
-description: Request Feature That You wanted
+title: "(Feature Request 🧪): "
+description: Request Additional or Missing Features
+tag: feature-request
 body:
-  - type: input
-    id: input-0
+  - type: textarea
+    id: textarea-0
     attributes:
-      label: Feature Name
-      description: Name Of feature
-      placeholder: Feature Name
+      value: ""
+      label: Is your feature request related to a problem? Please describe.
+      description: A clear and concise description of what the problem is.
   - type: textarea
     id: textarea-1
     attributes:
-      label: Description
-      description: Describe More Information
+      value: ""
+      label: Describe the solution you'd like
+      description: What would you like to happen? Be specific.
+  - type: textarea
+    id: textarea-2
+    attributes:
+      value: ""
+      label: Describe alternatives you've considered
+  - type: checkboxes
+    id: checkboxes-3
+    attributes:
+      value: ""
+      label: Are you willing to Contribute to this feature?
