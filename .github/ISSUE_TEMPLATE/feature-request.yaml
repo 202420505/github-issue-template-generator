@@ -1,7 +1,7 @@
 name: Feature Request
 title: "(Feature Request 🧪): "
 description: Request Additional or Missing Features
-label: feature-request
+labels: ["feature-request"]
 body:
   - type: textarea
     id: textarea-0
