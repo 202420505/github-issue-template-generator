@@ -62,17 +62,46 @@ const App: Component = () => {
     if (store.project.trim()) topFields.project = store.project;
     if (store.assignees.trim()) topFields.assignees = store.assignees;
 
-    const formData = store.sections.map((section, index) => {
-      const result: any = { type: section.type.toLowerCase() };
-      if (section.type !== "Markdown") {
-        result.id = `${section.type.toLowerCase().replace(/ /g, "-")}-${index}`;
-        result.attributes = { ...section };
-        delete result.attributes.type;
-      } else if (section.value) {
-        result.attributes = { value: section.value };
-      }
-      return result;
-    }).filter((item) => Object.keys(item.attributes || {}).length > 0);
+    const formData = store.sections
+      .map((section, index) => {
+        const result: any = { type: section.type.toLowerCase() };
+
+        if (section.type !== "Markdown") {
+          result.id = `${section.type.toLowerCase().replace(/ /g, "-")}-${index}`;
+          const attributes: any = {};
+
+          if (section.labels && section.labels.length > 0)
+            attributes.label = section.labels[0];
+
+          if (section.description) attributes.description = section.description;
+          if (section.placeholder) attributes.placeholder = section.placeholder;
+          if (section.required !== undefined) attributes.required = section.required;
+          if (section.multiple !== undefined) attributes.multiple = section.multiple;
+
+          if (section.type === "Input" || section.type === "Textarea") {
+            if (section.value) attributes.value = section.value;
+          }
+
+          if (section.type === "Dropdown") {
+            if (section.options && section.options.length > 0) {
+              attributes.options = section.options;
+            }
+          }
+
+          if (section.type === "Checkboxes") {
+            if (section.options && section.options.length > 0) {
+              attributes.options = section.options.map((opt) => ({ label: opt }));
+            }
+          }
+
+          result.attributes = attributes;
+        } else if (section.value) {
+          result.attributes = { value: section.value };
+        }
+
+        return result;
+      })
+      .filter((item) => Object.keys(item.attributes || {}).length > 0);
 
     return stringify({ ...topFields, body: formData });
   });
@@ -136,9 +165,11 @@ const App: Component = () => {
                       <Select
                         class="block my-4"
                         value={section.type}
-                        onInput={(e) => handleChange(index(), { type: e.currentTarget.value as Section["type"] })}
+                        onInput={(e) =>
+                          handleChange(index(), { type: e.currentTarget.value as Section["type"] })
+                        }
                       >
-                        {["Markdown", "Textarea", "Input", "Dropdown", "Checkboxes"].map((type) => (
+                        {["Markdown", "Textarea", "Input", "Dropdown", "Checkboxes (Not Working)"].map((type) => (
                           <option value={type}>{type}</option>
                         ))}
                       </Select>
@@ -147,21 +178,20 @@ const App: Component = () => {
                         <Show when={section.type !== "Markdown"}>
                           <Input
                             class="w-full block"
-                            placeholder="Enter labels (comma separated)"
-                            value={section.labels?.join(", ") || ""}
+                            placeholder="Enter label (used as title)"
+                            value={section.labels?.[0] || ""}
                             onInput={(e) => {
-                              const newLabels = e.currentTarget.value
-                                .split(",")
-                                .map((label) => label.trim())
-                                .filter(Boolean);
-                              handleChange(index(), { labels: newLabels });
+                              const label = e.currentTarget.value.trim();
+                              handleChange(index(), { labels: label ? [label] : [] });
                             }}
                           />
                           <Input
                             class="w-full block"
                             placeholder="Enter description"
                             value={section.description || ""}
-                            onInput={(e) => handleChange(index(), { description: e.currentTarget.value })}
+                            onInput={(e) =>
+                              handleChange(index(), { description: e.currentTarget.value })
+                            }
                           />
                           {section.type === "Input" && (
                             <>
@@ -169,13 +199,17 @@ const App: Component = () => {
                                 class="w-full block"
                                 placeholder="Enter placeholder"
                                 value={section.placeholder || ""}
-                                onInput={(e) => handleChange(index(), { placeholder: e.currentTarget.value })}
+                                onInput={(e) =>
+                                  handleChange(index(), { placeholder: e.currentTarget.value })
+                                }
                               />
                               <Input
                                 class="w-full block"
                                 placeholder="Enter value"
                                 value={section.value || ""}
-                                onInput={(e) => handleChange(index(), { value: e.currentTarget.value })}
+                                onInput={(e) =>
+                                  handleChange(index(), { value: e.currentTarget.value })
+                                }
                               />
                             </>
                           )}
@@ -185,7 +219,9 @@ const App: Component = () => {
                               class="w-full block"
                               placeholder="Enter text"
                               value={section.value || ""}
-                              onInput={(e) => handleChange(index(), { value: e.currentTarget.value })}
+                              onInput={(e) =>
+                                handleChange(index(), { value: e.currentTarget.value })
+                              }
                             />
                           )}
                           {(section.type === "Dropdown" || section.type === "Checkboxes") && (
