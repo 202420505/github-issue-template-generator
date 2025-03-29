@@ -11,6 +11,7 @@
   "dependencies": {
     "@fontsource-variable/noto-sans": "^5.0.5",
     "@jongwooo/prism-theme-github": "^1.14.0",
+    "@qwik.dev/partytown": "^0.11.0",
     "@types/prismjs": "^1.26.4",
     "autoprefixer": "^10.4.20",
     "class-variance-authority": "^0.7.0",
@@ -26,6 +27,7 @@
     "yaml": "^2.5.0"
   },
   "devDependencies": {
+    "@types/node": "^22.13.14",
     "typescript": "^5.5.3",
     "vite": "^5.4.1",
     "vite-plugin-solid": "^2.10.2"
