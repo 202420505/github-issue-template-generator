@@ -20,4 +20,8 @@ body:
   - type: checkboxes
     id: checkboxes-3
     attributes:
-      label: Are you willing to Contribute to this feature?
+        - label: Yes, I am willing to contribute.
+          value: yes
+        - label: No, I am not willing to contribute.
+          value: no
+
