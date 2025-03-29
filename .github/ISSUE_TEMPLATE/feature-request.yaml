@@ -23,4 +23,3 @@ body:
       label: Are you willing to contribute to this feature?
       options:
         - label: Yes, I am willing to contribute.
-        - label: No, I am not willing to contribute.
