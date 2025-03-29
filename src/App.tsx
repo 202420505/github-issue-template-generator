@@ -1,6 +1,5 @@
-import { createSignal, createMemo } from "solid-js";
+import { createSignal, createMemo, For, Show } from "solid-js";
 import { createStore } from "solid-js/store";
-import { For } from "solid-js";
 import type { Component } from "solid-js";
 import PlusIcon from "lucide-solid/icons/plus";
 import { CopyIcon, TrashIcon } from "lucide-solid";
@@ -119,16 +118,16 @@ const App: Component = () => {
               </div>
             ))}
 
-           <div>
+            <div>
               <h2 class="text-lg">Body</h2>
               <div class="space-y-2 divide-y-[1px] dark:divide-white/20">
                 <For each={store.sections}>
                   {(section, index) => (
-                    <div class="space-y-3">
+                    <div class="space-y-3 py-2">
                       <Select
                         class="block my-4"
                         value={section.type}
-                        onInput={(e) => handleChange(index(), "{ type",: e.currentTarget.value as Section["type"] })}
+                        onInput={(e) => handleChange(index(), { type: e.currentTarget.value as Section["type"] })}
                       >
                         {["Markdown", "Textarea", "Input", "Dropdown", "Checkboxes"].map((type) => (
                           <option value={type}>{type}</option>
@@ -141,13 +140,13 @@ const App: Component = () => {
                             class="w-full block"
                             placeholder="Enter label"
                             value={section.label || ""}
-                            onInput={(e) => handleChange(index(), "label", e.currentTarget.value)}
+                            onInput={(e) => handleChange(index(), { label: e.currentTarget.value })}
                           />
                           <Input
                             class="w-full block"
                             placeholder="Enter description"
                             value={section.description || ""}
-                            onInput={(e) => handleChange(index(), "description", e.currentTarget.value)}
+                            onInput={(e) => handleChange(index(), { description: e.currentTarget.value })}
                           />
                           {section.type === "Input" && (
                             <>
@@ -155,14 +154,13 @@ const App: Component = () => {
                                 class="w-full block"
                                 placeholder="Enter placeholder"
                                 value={section.placeholder || ""}
-                                onInput={(e) => handleChange(index(), "placeholder", e.currentTarget.value)}
+                                onInput={(e) => handleChange(index(), { placeholder: e.currentTarget.value })}
                               />
                               <Input
                                 class="w-full block"
                                 placeholder="Enter value"
                                 value={section.value || ""}
-                                onInputflex justify-end">
-                        <Button variety="primary" class="flex gap-1" onClick={(e) => handleChange(index(), "value", e.currentTarget.value)}
+                                onInput={(e) => handleChange(index(), { value: e.currentTarget.value })}
                               />
                             </>
                           )}
@@ -172,35 +170,34 @@ const App: Component = () => {
                               class="w-full block"
                               placeholder="Enter text"
                               value={section.value || ""}
-                              onInput={(e) => handleChange(index(), "value", e.currentTarget.value)}
+                              onInput={(e) => handleChange(index(), { value: e.currentTarget.value })}
                             />
                           )}
-                          {section.type === "Dropdown" && (
+                          {(section.type === "Dropdown" || section.type === "Checkboxes") && (
                             <Input
                               class="w-full block"
                               placeholder="Enter options"
                               value={section.options?.join(", ") || ""}
-                              onInput={(e) => handleChange(index(), "options", e.currentTarget.value.split(", "))}
-                            />
-                          )}
-                          {section.type === "Checkboxes" && (
-                            <Input
-                              class="w-full block"
-                              placeholder="Enter options"
-                              value={section.options?.join(", ") || ""}
-                              onInput={(e) => handleChange(index(), "options", e.currentTarget.value.split(", "))}
+                              onInput={(e) => handleChange(index(), { options: e.currentTarget.value.split(", ") })}
                             />
                           )}
                         </Show>
-                        {section.type === "Markdown" && (
+
+                        <Show when={section.type === "Markdown"}>
                           <Textarea
                             rows={3}
                             class="w-full block"
                             placeholder="Enter markdown content"
                             value={section.value || ""}
-                            onInput={(e) => handleChange(index(), "value", e.currentTarget.value)}
+                            onInput={(e) => handleChange(index(), { value: e.currentTarget.value })}
                           />
-                        )}removeSection(index())}>
+                        </Show>
+
+                        <Button
+                          variety="ghost"
+                          class="flex gap-1 text-red-600"
+                          onClick={() => removeSection(index())}
+                        >
                           <TrashIcon size={14} /> Remove
                         </Button>
                       </div>
@@ -212,7 +209,7 @@ const App: Component = () => {
                   <Button
                     variety="primary"
                     class="flex gap-1 py-1.5 items-center"
-                    variety="primary" class="flex gap-1 py-1.5" onClick={addSection}
+                    onClick={addSection}
                   >
                     <PlusIcon size={14} />
                     Add Section
@@ -226,15 +223,13 @@ const App: Component = () => {
             <div class="flex justify-end">
               <button
                 class="px-4 py-1 flex items-center gap-2 text-sm hover:bg-black/10 dark:hover:bg-white/10 rounded transform duration-200"
-               rounded" onClick={handleCopy}
+                onClick={handleCopy}
               >
                 {copied() ? "Copied" : "Copy"}
                 <CopyIcon size={17} />
               </button>
             </div>
-            <Highlight language="yaml">
-              {store.yamlOutput}
-            {yamlOutput()}</Highlight>
+            <Highlight language="yaml">{yamlOutput()}</Highlight>
           </div>
         </div>
       </div>
