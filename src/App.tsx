@@ -163,6 +163,12 @@ const App: Component = () => {
                                 value={section.value || ""}
                                 onInput={(e) => handleChange(index(), { value: e.currentTarget.value })}
                               />
+                              <Input
+                                type="checkbox"
+                                class="w-full block"
+                                checked={section.required || false}
+                                onInput={(e) => handleChange(index(), { required: e.currentTarget.checked })}
+                              />
                             </>
                           )}
                           {section.type === "Textarea" && (
@@ -192,6 +198,12 @@ const App: Component = () => {
                             value={section.value || ""}
                             onInput={(e) => handleChange(index(), { value: e.currentTarget.value })}
                           />
+                            <Input
+                                type="checkbox"
+                                class="w-full block"
+                                checked={section.required || false}
+                                onInput={(e) => handleChange(index(), { required: e.currentTarget.checked })}
+                            />
                         </Show>
 
                         <Button
