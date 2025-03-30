@@ -103,7 +103,9 @@ const App: Component = () => {
       })
       .filter((item) => Object.keys(item.attributes || {}).length > 0);
 
-    return stringify({ ...topFields, body: formData });
+    return stringify({ ...topFields, body: formData }, {
+      blockQuote: true,
+    });
   });
 
   const handleCopy = async () => {
@@ -169,7 +171,7 @@ const App: Component = () => {
                           handleChange(index(), { type: e.currentTarget.value as Section["type"] })
                         }
                       >
-                        {["Markdown", "Textarea", "Input", "Dropdown", "Checkboxes (Not Working)"].map((type) => (
+                        {["Markdown", "Textarea", "Input", "Dropdown", "Checkboxes"].map((type) => (
                           <option value={type}>{type}</option>
                         ))}
                       </Select>
@@ -225,19 +227,21 @@ const App: Component = () => {
                             />
                           )}
                           {(section.type === "Dropdown" || section.type === "Checkboxes") && (
-                            <Input
-                              class="w-full block"
-                              placeholder="Enter options (comma separated)"
-                              value={section.options?.join(", ") || ""}
-                              onInput={(e) =>
-                                handleChange(index(), {
-                                  options: e.currentTarget.value
-                                    .split(",")
-                                    .map((opt) => opt.trim())
-                                    .filter(Boolean),
-                                })
-                              }
-                            />
+                            <>
+                              <Input
+                                class="w-full block"
+                                placeholder="Enter options (comma separated)"
+                                value={section.options?.join(", ") || ""}
+                                onInput={(e) =>
+                                  handleChange(index(), {
+                                    options: e.currentTarget.value
+                                      .split(",")
+                                      .map((opt) => opt.trim())
+                                      .filter(Boolean),
+                                  })
+                                }
+                              />
+                            </>
                           )}
                         </Show>
 
