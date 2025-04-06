@@ -243,6 +243,16 @@ const App: Component = () => {
                               />
                             </>
                           )}
+                          <label>
+                            <input
+                              type="checkbox"
+                              checked={section.required || false}
+                              onChange={(e) =>
+                                handleChange(index(), { required: e.currentTarget.checked })
+                              }
+                            />
+                            Required
+                          </label>
                         </Show>
 
                         <Show when={section.type === "Markdown"}>
